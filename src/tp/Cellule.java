@@ -85,10 +85,10 @@ public class Cellule {
 
         for (int i = 0; i < 9; i++) {
             try {
-                if (this.grille[(this.x-1)+((i-(i%3))/3)][(this.y-1)+(i%3)].vivante) {
+                if (this.grille[(this.x - 1) + ((i - (i % 3)) / 3)][(this.y - 1) + (i % 3)].vivante) {
                     nbVoisin += 1;
                 }
-            }catch (ArrayIndexOutOfBoundsException ignored){
+            } catch (ArrayIndexOutOfBoundsException ignored) {
 
             }
         }
@@ -111,5 +111,11 @@ public class Cellule {
             }
             this.setEtatChange(true);
         }
+    }
+
+    public void clear() {
+        this.vivante = false;
+        this.cercle.setFill(Color.DARKSLATEGRAY);
+        this.setEtatChange(true);
     }
 }

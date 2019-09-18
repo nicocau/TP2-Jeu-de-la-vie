@@ -72,6 +72,14 @@ public class Matrice {
         }
     }
 
+    public void clear() {
+        for (int x = 0; x < this.taille; x++) {
+            for (int y = 0; y < this.taille; y++) {
+                this.grille[x][y].clear();
+            }
+        }
+    }
+
     public void copieGrilles() {
         for (int x = 0; x < this.taille; x++) {
             for (int y = 0; y < this.taille; y++) {

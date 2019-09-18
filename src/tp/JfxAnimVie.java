@@ -3,8 +3,10 @@ package tp;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
@@ -70,6 +72,24 @@ public class JfxAnimVie extends Application {
         ));
         littleCycle.setCycleCount(Timeline.INDEFINITE);
         littleCycle.play();
+        scene.setOnKeyReleased(new EventHandler<KeyEvent>(){
+            public void handle(KeyEvent ke){
+                switch (ke.getText()){
+                    case "p":
+                        littleCycle.pause();
+                        break;
+                    case "d":
+                        littleCycle.play();
+                        break;
+                    case "e":
+                        matrice.clear();
+                        break;
+                    case "h":
+                        matrice.initHasard();
+                        break;
+                }
+            }
+        });
     }
 
     /**
