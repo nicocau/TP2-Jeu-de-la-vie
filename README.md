@@ -1,6 +1,8 @@
 TP2 : Jeu de la vie
 ===
 
+http://emmanuel.adam.free.fr/site/spip.php?article98
+
 Jeu de la vie
 ---
 
