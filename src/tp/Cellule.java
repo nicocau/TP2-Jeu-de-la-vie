@@ -118,4 +118,16 @@ public class Cellule {
         this.cercle.setFill(Color.DARKSLATEGRAY);
         this.setEtatChange(true);
     }
+
+    public void cliked() {
+        if (isVivante()) {
+            this.vivante = false;
+            this.cercle.setFill(Color.DARKSLATEGRAY);
+            this.setEtatChange(true);
+        } else {
+            this.vivante = true;
+            this.cercle.setFill(Color.ANTIQUEWHITE);
+            this.setEtatChange(true);
+        }
+    }
 }

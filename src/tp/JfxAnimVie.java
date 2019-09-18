@@ -7,6 +7,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
@@ -106,6 +107,9 @@ public class JfxAnimVie extends Application {
                 if (cell.isVivante()) circles[i][j].setFill(Color.ANTIQUEWHITE);
                 else circles[i][j].setFill(Color.DARKSLATEGRAY);
                 root.getChildren().add(circles[i][j]);
+
+                circles[i][j].setOnMouseClicked(me -> cell.cliked());
+
             }
     }
 
