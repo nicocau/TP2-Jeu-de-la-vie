@@ -3,6 +3,8 @@ TP2 : Jeu de la vie
 
 http://emmanuel.adam.free.fr/site/spip.php?article98
 
+https://github.com/EmmanuelADAM/coursJavaAvance/tree/master/TP/JeuDeLaVie
+
 Jeu de la vie
 ---
 
