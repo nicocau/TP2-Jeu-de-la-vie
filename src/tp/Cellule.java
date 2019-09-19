@@ -82,7 +82,7 @@ public class Cellule {
 
     public void evoluer() {
         int nbVoisin = 0;
-//TODO : Corriger le bug
+
         boolean ancienEtas = this.vivante;
 
         for (int i = 0; i < 9; i++) {
@@ -97,6 +97,7 @@ public class Cellule {
             }
         }
 
+
         if (nbVoisin == 2 || nbVoisin == 3) {
             if (nbVoisin == 3) {
                 this.setVivante(true);
@@ -109,9 +110,9 @@ public class Cellule {
             this.setEtatChange(false);
         } else {
             if (this.vivante) {
-                this.editColor(Color.DARKSLATEGRAY, Color.ANTIQUEWHITE);
+                this.editColor((Color)this.cercle.getFill(), Color.ANTIQUEWHITE);
             } else {
-                this.editColor(Color.ANTIQUEWHITE, Color.DARKSLATEGRAY);
+                this.editColor((Color)this.cercle.getFill(), Color.DARKSLATEGRAY);
             }
             this.setEtatChange(true);
         }
@@ -119,23 +120,23 @@ public class Cellule {
 
     public void clear() {
         this.vivante = false;
-        this.editColor(Color.ANTIQUEWHITE, Color.DARKSLATEGRAY);
+        this.editColor((Color)this.cercle.getFill(), Color.DARKSLATEGRAY);
         this.setEtatChange(true);
     }
 
     public void cliked() {
         if (isVivante()) {
             this.vivante = false;
-            this.editColor(Color.ANTIQUEWHITE, Color.DARKSLATEGRAY);
+            this.editColor((Color)this.cercle.getFill(), Color.DARKSLATEGRAY);
             this.setEtatChange(true);
         } else {
             this.vivante = true;
-            this.editColor(Color.DARKSLATEGRAY, Color.ANTIQUEWHITE);
+            this.editColor((Color)this.cercle.getFill(), Color.ANTIQUEWHITE);
             this.setEtatChange(true);
         }
     }
 
     private void editColor(Color color1, Color color2) {
-        new FillTransition(Duration.millis(100/2),cercle,color1,color2).play();
+        new FillTransition(Duration.millis(100 / 2), cercle, color1, color2).play();
     }
 }
