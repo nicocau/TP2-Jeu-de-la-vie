@@ -3,48 +3,31 @@ package tp;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.util.ArrayList;
-
 public class JfxAnimVie extends Application {
-    /**
-     * matrice liee a cet objet graphique
-     */
+
     Matrice matrice;
-    /**
-     * elements graphiques représentant les cellules
-     */
+
     public static Circle[][] circles;
-    /**
-     * taille d'une cellule en pixel
-     */
+
     int espace = 10;
-    /**
-     * taille de la matrice
-     */
+
     private int taille;
-    /**
-     * nombre de celluls initialement actives
-     */
+
     private double densite;
-    /**
-     * délai en ms entre chaque évolution
-     */
+
     private int tempo;
 
     @Override
     public void start(Stage primaryStage) {
-        taille = 20;
-        densite = 0.2;
+        taille = 20 * 2;
+        densite = 0.5;
         tempo = 100;
         construireScenePourJeuDeLaVie(primaryStage);
     }
@@ -52,7 +35,7 @@ public class JfxAnimVie extends Application {
     void construireScenePourJeuDeLaVie(Stage primaryStage) {
         int largeur = 80 * 4;
         int hauteur = 80 * 4;
-        espace = 4 * 4;
+        espace = 4 * 2;
         //definir la scene principale
         Group root = new Group();
         Scene scene = new Scene(root, largeur, hauteur, Color.BLACK);
@@ -68,11 +51,11 @@ public class JfxAnimVie extends Application {
         //afficher le theatre
         primaryStage.show();
         //-----lancer le timer pour faire vivre la matrice
-        Timeline littleCycle = new Timeline(new KeyFrame(Duration.millis(tempo), event -> {
-            matrice.copieGrilles();
-            matrice.animGrille();
-        }
-        ));
+        Timeline littleCycle = new Timeline(new KeyFrame(Duration.millis(tempo),
+                event -> {
+                    matrice.avancer();
+                    matrice.animGrille();
+                }));
         littleCycle.setCycleCount(Timeline.INDEFINITE);
         littleCycle.play();
         scene.setOnKeyReleased(ke -> {
@@ -97,9 +80,6 @@ public class JfxAnimVie extends Application {
         });
     }
 
-    /**
-     * creation des cellules et de leurs habits
-     */
     void dessinMatrice(Group root) {
         Cellule[][] grille = matrice.getGrille();
         int rayon = espace / 2;
@@ -108,8 +88,8 @@ public class JfxAnimVie extends Application {
                 Cellule cell = grille[i][j];
                 circles[i][j] = new Circle(i * espace + rayon, j * espace + rayon, rayon);
                 cell.setCercle(circles[i][j]);
-                if (cell.isVivante()) circles[i][j].setFill(Color.ANTIQUEWHITE);
-                else circles[i][j].setFill(Color.DARKSLATEGRAY);
+                if (cell.isVivante()) circles[i][j].setFill(Cellule.COUL_ACTIVE);
+                else circles[i][j].setFill(Cellule.COUL_DESACTIVE);
                 root.getChildren().add(circles[i][j]);
 
                 circles[i][j].setOnMouseClicked(me -> cell.cliked());

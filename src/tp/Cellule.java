@@ -5,12 +5,21 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
-import java.util.Random;
-
 public class Cellule {
 
+    static final public Color COUL_VERS_ACTIVE = Color.CYAN;
+    static final public Color COUL_ACTIVE = Color.ALICEBLUE;
+    static final public Color COUL_VERS_DESACTIVE = Color.INDIANRED;
+    static final public Color COUL_DESACTIVE = Color.color(0.1, 0, 0);
+    static final int SOUS_POPULATION = 1;
+    static final int SUR_POPULATION = 4;
+    static final int MIN_POPULATION_REGENERATRICE = 3;
+    static final int MAX_POPULATION_REGENERATRICE = 3;
+
     private Boolean vivante;
-    private Boolean etatChange;
+    private Boolean enTransition;
+    private boolean etatPrecedent;
+    private boolean etatSuivant;
     private Cellule[][] grille;
     private Circle cercle;
     private int x;
@@ -20,123 +29,88 @@ public class Cellule {
         this.grille = grille;
         this.x = x;
         this.y = y;
+        this.enTransition = false;
         this.vivante = vivante;
-        this.etatChange = false;
-    }
-
-    public Boolean getVivante() {
-        return vivante;
+        this.etatSuivant = vivante;
+        this.etatPrecedent = vivante;
     }
 
     public Boolean isVivante() {
-        return vivante;
+        return this.vivante;
     }
 
     public void setVivante(Boolean vivante) {
         this.vivante = vivante;
     }
 
-    public Boolean getEtatChange() {
-        return etatChange;
-    }
-
-    public Boolean isEtatChange() {
-        return etatChange;
-    }
-
-    public void setEtatChange(Boolean etatChange) {
-        this.etatChange = etatChange;
-    }
-
-    public Cellule[][] getGrille() {
-        return grille;
-    }
-
-    public void setGrille(Cellule[][] grille) {
-        this.grille = grille;
-    }
-
-    public Circle getCercle() {
-        return cercle;
+    public void setEtatSuivant(boolean etatSuivant) {
+        this.etatSuivant = etatSuivant;
     }
 
     public void setCercle(Circle cercle) {
         this.cercle = cercle;
     }
 
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
     public void evoluer() {
-        int nbVoisin = 0;
-
-        boolean ancienEtas = this.vivante;
-
-        for (int i = 0; i < 9; i++) {
-            try {
-                int soustraiLigne = ((i - (i % 3)) / 3) - 1;
-                int soustraiColone = (i % 3) - 1;
-                if (this.grille[this.x + soustraiLigne][this.y + soustraiColone].vivante && i != 4) {
-                    nbVoisin += 1;
+        int taille = this.grille.length;
+        int nbVivantes = 0;
+        for (int i = -1; i < 2; i++) {
+            int xx = ((x + i) + taille) % taille;
+            for (int j = -1; j < 2; j++) {
+                if (i == 0 && j == 0) {
+                    continue;
                 }
-            } catch (ArrayIndexOutOfBoundsException ignored) {
-
+                int yy = ((y + j) + taille) % taille;
+                if (this.grille[xx][yy].vivante) {
+                    nbVivantes++;
+                }
             }
         }
-
-
-        if (nbVoisin == 2 || nbVoisin == 3) {
-            if (nbVoisin == 3) {
-                this.setVivante(true);
+        this.etatPrecedent = this.vivante;
+        if (this.vivante && (nbVivantes <= Cellule.SOUS_POPULATION || nbVivantes >= Cellule.SUR_POPULATION)) {
+            this.etatSuivant = false;
+            this.enTransition = true;
+        } else {
+            if (nbVivantes >= Cellule.MIN_POPULATION_REGENERATRICE && nbVivantes <= Cellule.MAX_POPULATION_REGENERATRICE) {
+                this.etatSuivant = true;
+                this.enTransition = true;
             }
-        } else {
-            this.setVivante(false);
         }
+        switchColor();
+    }
 
-        if (this.vivante == ancienEtas) {
-            this.setEtatChange(false);
-        } else {
-            if (this.vivante) {
-                this.editColor((Color)this.cercle.getFill(), Color.ANTIQUEWHITE);
+    public void switchColor() {
+        Color c;
+        if (this.enTransition) {
+            if (this.etatSuivant) {
+                c = Cellule.COUL_VERS_ACTIVE;
             } else {
-                this.editColor((Color)this.cercle.getFill(), Color.DARKSLATEGRAY);
+                c = Cellule.COUL_VERS_DESACTIVE;
             }
-            this.setEtatChange(true);
+            this.enTransition = !this.enTransition;
+        } else {
+            if (this.etatSuivant) {
+                c = Cellule.COUL_ACTIVE;
+            } else {
+                c = Cellule.COUL_DESACTIVE;
+            }
         }
+        new FillTransition(Duration.millis(100 / 2), this.cercle, (Color) this.cercle.getFill(), c).play();
     }
 
     public void clear() {
         this.vivante = false;
-        this.editColor((Color)this.cercle.getFill(), Color.DARKSLATEGRAY);
-        this.setEtatChange(true);
+        this.etatPrecedent = false;
+        this.etatSuivant = false;
+        this.cercle.setFill(Cellule.COUL_DESACTIVE);
     }
 
     public void cliked() {
-        if (isVivante()) {
-            this.vivante = false;
-            this.editColor((Color)this.cercle.getFill(), Color.DARKSLATEGRAY);
-            this.setEtatChange(true);
-        } else {
-            this.vivante = true;
-            this.editColor((Color)this.cercle.getFill(), Color.ANTIQUEWHITE);
-            this.setEtatChange(true);
-        }
+        this.etatSuivant = !this.etatSuivant;
+        this.switchColor();
     }
 
-    private void editColor(Color color1, Color color2) {
-        new FillTransition(Duration.millis(100 / 2), cercle, color1, color2).play();
+    public void avancer() {
+        this.vivante = this.etatSuivant;
     }
 }
