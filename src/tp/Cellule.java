@@ -86,7 +86,9 @@ public class Cellule {
         for (int i = 0; i < 9; i++) {
             try {
                 if (this.grille[(this.x - 1) + ((i - (i % 3)) / 3)][(this.y - 1) + (i % 3)].vivante) {
-                    nbVoisin += 1;
+                    if (i != 0 && y != 0) {
+                        nbVoisin += 1;
+                    }
                 }
             } catch (ArrayIndexOutOfBoundsException ignored) {
 
