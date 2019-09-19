@@ -1,7 +1,9 @@
 package tp;
 
+import javafx.animation.FillTransition;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.util.Duration;
 
 import java.util.Random;
 
@@ -80,15 +82,15 @@ public class Cellule {
 
     public void evoluer() {
         int nbVoisin = 0;
-
+//TODO : Corriger le bug
         boolean ancienEtas = this.vivante;
 
         for (int i = 0; i < 9; i++) {
             try {
-                if (this.grille[(this.x - 1) + ((i - (i % 3)) / 3)][(this.y - 1) + (i % 3)].vivante) {
-                    if (i != 0 && y != 0) {
-                        nbVoisin += 1;
-                    }
+                int soustraiLigne = ((i - (i % 3)) / 3) - 1;
+                int soustraiColone = (i % 3) - 1;
+                if (this.grille[this.x + soustraiLigne][this.y + soustraiColone].vivante && i != 4) {
+                    nbVoisin += 1;
                 }
             } catch (ArrayIndexOutOfBoundsException ignored) {
 
@@ -96,7 +98,7 @@ public class Cellule {
         }
 
         if (nbVoisin == 2 || nbVoisin == 3) {
-            if (nbVoisin == 3 && !this.getEtatChange()) {
+            if (nbVoisin == 3) {
                 this.setVivante(true);
             }
         } else {
@@ -107,9 +109,9 @@ public class Cellule {
             this.setEtatChange(false);
         } else {
             if (this.vivante) {
-                this.cercle.setFill(Color.ANTIQUEWHITE);
+                this.editColor(Color.DARKSLATEGRAY, Color.ANTIQUEWHITE);
             } else {
-                this.cercle.setFill(Color.DARKSLATEGRAY);
+                this.editColor(Color.ANTIQUEWHITE, Color.DARKSLATEGRAY);
             }
             this.setEtatChange(true);
         }
@@ -117,19 +119,23 @@ public class Cellule {
 
     public void clear() {
         this.vivante = false;
-        this.cercle.setFill(Color.DARKSLATEGRAY);
+        this.editColor(Color.ANTIQUEWHITE, Color.DARKSLATEGRAY);
         this.setEtatChange(true);
     }
 
     public void cliked() {
         if (isVivante()) {
             this.vivante = false;
-            this.cercle.setFill(Color.DARKSLATEGRAY);
+            this.editColor(Color.ANTIQUEWHITE, Color.DARKSLATEGRAY);
             this.setEtatChange(true);
         } else {
             this.vivante = true;
-            this.cercle.setFill(Color.ANTIQUEWHITE);
+            this.editColor(Color.DARKSLATEGRAY, Color.ANTIQUEWHITE);
             this.setEtatChange(true);
         }
+    }
+
+    private void editColor(Color color1, Color color2) {
+        new FillTransition(Duration.millis(100/2),cercle,color1,color2).play();
     }
 }

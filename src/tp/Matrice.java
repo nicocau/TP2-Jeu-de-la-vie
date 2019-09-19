@@ -73,9 +73,9 @@ public class Matrice {
     }
 
     public void clear() {
-        for (int x = 0; x < this.taille; x++) {
-            for (int y = 0; y < this.taille; y++) {
-                this.grille[x][y].clear();
+        for (Cellule[] ligne : this.grille) {
+            for (Cellule c : ligne) {
+                c.clear();
             }
         }
     }
@@ -91,9 +91,9 @@ public class Matrice {
     }
 
     public void animGrille() {
-        for (int x = 0; x < this.taille; x++) {
-            for (int y = 0; y < this.taille; y++) {
-                this.grille[x][y].evoluer();
+        for (Cellule[] ligne : this.grille) {
+            for (Cellule c : ligne) {
+                c.evoluer();
             }
         }
     }

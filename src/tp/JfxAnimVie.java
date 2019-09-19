@@ -13,6 +13,8 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
+
 public class JfxAnimVie extends Application {
     /**
      * matrice liee a cet objet graphique
@@ -41,16 +43,16 @@ public class JfxAnimVie extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        taille = 20*4;
+        taille = 20;
         densite = 0.2;
         tempo = 100;
         construireScenePourJeuDeLaVie(primaryStage);
     }
 
     void construireScenePourJeuDeLaVie(Stage primaryStage) {
-        int largeur = 80*5;
-        int hauteur = 90*5;
-        espace = 4;
+        int largeur = 80 * 4;
+        int hauteur = 80 * 4;
+        espace = 4 * 4;
         //definir la scene principale
         Group root = new Group();
         Scene scene = new Scene(root, largeur, hauteur, Color.BLACK);
@@ -73,22 +75,24 @@ public class JfxAnimVie extends Application {
         ));
         littleCycle.setCycleCount(Timeline.INDEFINITE);
         littleCycle.play();
-        scene.setOnKeyReleased(new EventHandler<KeyEvent>(){
-            public void handle(KeyEvent ke){
-                switch (ke.getText()){
-                    case "p":
-                        littleCycle.pause();
-                        break;
-                    case "d":
-                        littleCycle.play();
-                        break;
-                    case "e":
-                        matrice.clear();
-                        break;
-                    case "h":
-                        matrice.initHasard();
-                        break;
-                }
+        scene.setOnKeyReleased(ke -> {
+            switch (ke.getText()) {
+                case "p":
+                case "P":
+                    littleCycle.pause();
+                    break;
+                case "d":
+                case "D":
+                    littleCycle.play();
+                    break;
+                case "e":
+                case "E":
+                    matrice.clear();
+                    break;
+                case "h":
+                case "H":
+                    matrice.initHasard();
+                    break;
             }
         });
     }
